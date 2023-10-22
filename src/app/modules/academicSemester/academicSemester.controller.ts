@@ -13,7 +13,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Academic Semester Created!!',
-    data: result,
+    data: result
   });
 });
 
@@ -30,7 +30,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: 'Academic Semester data fetched!!',
     meta: result.meta,
-    data: result.data,
+    data: result.data
   });
 });
 
@@ -40,12 +40,38 @@ const getDataById = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Academic Semester data fetched!!',
+    data: result
+  });
+});
+
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await AcademicSemesterService.updateIntoDB(id, payload);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Semester updated successfully',
     data: result,
   });
 });
+
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AcademicSemesterService.deleteFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Semester successfully',
+    data: result,
+  });
+});
+
 
 export const AcademicSemesterController = {
   insertIntoDB,
   getAllFromDB,
   getDataById,
+  updateIntoDB,
+  deleteFromDB
 };
