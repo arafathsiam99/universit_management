@@ -1,69 +1,31 @@
-export type IStudentFilterRequest = {
-  searchTerm?: string | undefined;
-  academicFacultyId?: string | undefined;
-  academicDepartmentId?: string | undefined;
-  academicSemesterId?: string | undefined;
-  studentId?: string | undefined;
-  email?: string | undefined;
-  contactNo?: string | undefined;
-  gender?: string | undefined;
-  bloodGroup?: string | undefined;
-};
+import express from 'express';
+import { ENUM_USER_ROLE } from '../../../enums/user';
+import auth from '../../middlewares/auth';
+import validateRequest from '../../middlewares/validateRequest';
+import { StudentController } from './student.controller';
+import { StudentValidation } from './student.validations';
 
-export type IStudentMyCoursesRequest = {
-  academicSemesterId?: string | undefined;
-  courseId?: string | undefined;
-};
+const router = express.Router();
 
-export type IStudentMyCourseSchedulesRequest = {
-  academicSemesterId?: string | undefined;
-  courseId?: string | undefined;
-};
+router.get('/', StudentController.getAllFromDB);
 
-export type StudentCreatedEvent = {
-  id: string;
-  name: {
-    firstName: string;
-    lastName: string;
-    middleName?: string;
-  };
-  dateOfBirth: string;
-  gender: string;
-  bloodGroup: string;
-  email: string;
-  contactNo: string;
-  profileImage: string;
-  academicFaculty: {
-    syncId: string;
-  };
-  academicDepartment: {
-    syncId: string;
-  };
-  academicSemester: {
-    syncId: string;
-  };
-};
+router.get('/:id', StudentController.getByIdFromDB);
 
-export type StudentUpdatedEvent = {
-  id: string;
-  name: {
-    firstName: string;
-    lastName: string;
-    middleName?: string;
-  };
-  dateOfBirth: string;
-  gender: string;
-  bloodGroup: string;
-  email: string;
-  contactNo: string;
-  profileImage: string;
-  academicFaculty: {
-    syncId: string;
-  };
-  academicDepartment: {
-    syncId: string;
-  };
-  academicSemester: {
-    syncId: string;
-  };
-};
+router.post(
+  '/',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  validateRequest(StudentValidation.create),
+  StudentController.insertIntoDB
+);
+router.patch(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  StudentController.updateIntoDB
+);
+router.delete(
+  '/:id',
+  auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
+  StudentController.deleteFromDB
+);
+
+export const studentRoutes = router;

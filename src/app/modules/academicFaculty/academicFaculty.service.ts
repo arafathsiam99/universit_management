@@ -10,7 +10,7 @@ const insertIntoDB = async (
   data: AcademicFaculty
 ): Promise<AcademicFaculty> => {
   const result = await prisma.academicFaculty.create({
-    data,
+    data
   });
 
   return result;
@@ -30,9 +30,9 @@ const getAllFromDB = async (
       OR: academicFacultySearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
-          mode: 'insensitive',
-        },
-      })),
+          mode: 'insensitive'
+        }
+      }))
     });
   }
 
@@ -40,9 +40,9 @@ const getAllFromDB = async (
     andConditions.push({
       AND: Object.keys(filterData).map(key => ({
         [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+          equals: (filterData as any)[key]
+        }
+      }))
     });
   }
 
@@ -57,28 +57,49 @@ const getAllFromDB = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            createdAt: 'desc',
-          },
+            createdAt: 'desc'
+          }
   });
   const total = await prisma.academicFaculty.count({
-    where: whereConditions,
+    where: whereConditions
   });
 
   return {
     meta: {
       total,
       page,
-      limit,
+      limit
     },
-    data: result,
+    data: result
   };
 };
 
 const getByIdFromDB = async (id: string): Promise<AcademicFaculty | null> => {
   const result = await prisma.academicFaculty.findUnique({
     where: {
-      id,
+      id
+    }
+  });
+  return result;
+};
+
+const updateIntoDB = async (
+  id: string,
+  payload: Partial<AcademicFaculty>
+): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.update({
+    where: {
+      id
     },
+    data: payload
+  });
+  return result;
+};
+const deleteFromDB = async (id: string): Promise<AcademicFaculty> => {
+  const result = await prisma.academicFaculty.delete({
+    where: {
+      id
+    }
   });
   return result;
 };
@@ -87,4 +108,6 @@ export const AcademicFacultyService = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
+  updateIntoDB,
+  deleteFromDB
 };

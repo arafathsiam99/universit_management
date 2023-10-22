@@ -12,7 +12,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'AcademicDepartment created successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -25,7 +25,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: 'AcademicDepartments fetched successfully',
     meta: result.meta,
-    data: result.data,
+    data: result.data
   });
 });
 
@@ -36,7 +36,29 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'AcademicDepartment fetched successfully',
-    data: result,
+    data: result
+  });
+});
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await AcademicDepartmentService.updateIntoDB(id, payload);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Department updated successfully',
+    data: result
+  });
+});
+
+const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AcademicDepartmentService.deleteFromDB(id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Department deleted successfully',
+    data: result
   });
 });
 
@@ -44,4 +66,6 @@ export const AcademicDepartmentController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
+  updateIntoDB,
+  deleteFromDB
 };

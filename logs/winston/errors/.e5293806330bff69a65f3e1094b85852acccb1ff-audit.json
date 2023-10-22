@@ -39,6 +39,36 @@
             "date": 1697805049812,
             "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-20-10-18-error.log",
             "hash": "0b29c8f2b67abd9b4a6c04500ab0bc608100daa7fe40fb0cd0e7850e04b3f023"
+        },
+        {
+            "date": 1697814628745,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-20-10-21-error.log",
+            "hash": "dccfaf1ac7a7774375baebf138cbf9e861a30b4c920c1ecbc86d0d13b77bf450"
+        },
+        {
+            "date": 1697978941739,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-10-18-error.log",
+            "hash": "2c0f6826f90eea8bc63e265de4dec9f7b3a7d75384009d8273e38bffd8022d57"
+        },
+        {
+            "date": 1697981100106,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-10-19-error.log",
+            "hash": "7358846443d1b817660773bb94e7aa06d197805c1c8843dfa78dea1b6a5a436f"
+        },
+        {
+            "date": 1697983368818,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-10-20-error.log",
+            "hash": "85c0ebf5ad88fb35d040fd5070e8e6194cfffffec8182f90783f6d4d78049a2c"
+        },
+        {
+            "date": 1697987354883,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-10-21-error.log",
+            "hash": "1f0a7d495782574c1ff7383c0799579a3706fe8db4e28e29b983236b0fdc4832"
+        },
+        {
+            "date": 1697990404832,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-22-10-22-error.log",
+            "hash": "e8fe52949e82e21df9dba8599a5281687377f292914a90f679fc30d146ef5495"
         }
     ],
     "hashType": "sha256"
