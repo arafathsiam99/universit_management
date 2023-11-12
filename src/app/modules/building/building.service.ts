@@ -62,6 +62,15 @@ const getAllFromDB = async (
   };
 };
 
+const getByIdFromDB = async (id: string): Promise<Building | null> => {
+  const result = await prisma.building.findUnique({
+    where: {
+      id
+    }
+  });
+  return result;
+};
+
 const updateIntoDB = async (
   id: string,
   payload: Partial<Building>
@@ -87,6 +96,7 @@ const deleteFromDB = async (id: string): Promise<Building> => {
 export const BuildingService = {
   insertIntoDB,
   getAllFromDB,
+  getByIdFromDB,
   updateIntoDB,
   deleteFromDB
 };

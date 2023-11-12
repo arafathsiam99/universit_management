@@ -8,6 +8,7 @@ import { BuildingValidations } from './building.validation';
 const router = express.Router();
 
 router.get('/', BuildingController.getAllFromDB);
+router.get('/:id', BuildingController.getByIdFromDB);
 router.post(
   '/',
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
