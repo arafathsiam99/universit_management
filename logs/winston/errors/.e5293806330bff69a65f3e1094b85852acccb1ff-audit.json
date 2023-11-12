@@ -9,6 +9,11 @@
             "date": 1699801498097,
             "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-12-11-21-error.log",
             "hash": "27a4278aef4a4adf9922159f567034bb8b0ec8203cdd3bdc5dbdcb2f1c786cf7"
+        },
+        {
+            "date": 1699805129374,
+            "name": "D:\\Next-Level-PH\\Milestone_6\\university-management-core-service-starter\\logs\\winston\\errors\\phu-2023-12-11-22-error.log",
+            "hash": "d123e6ee67821860dd1bf0b80e6988f0823af9eb72e7f16d62d56affb9349a13"
         }
     ],
     "hashType": "sha256"

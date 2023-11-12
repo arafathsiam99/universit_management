@@ -34,6 +34,7 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
     }
     return result;
   });
+  
   if (newCourse) {
     const responseData = await prisma.course.findUnique({
       where: {
