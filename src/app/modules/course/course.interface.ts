@@ -4,9 +4,10 @@ export type ICourseCreateData = {
   credits: number;
   preRequisiteCourses: {
     courseId: string;
+    isDeleted?: null;
   }[];
 };
 
 export type ICourseFilterRequest = {
-  searchTerm?: string;
+  searchTerm?: string | undefined;
 };

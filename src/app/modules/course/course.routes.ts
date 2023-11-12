@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', CourseController.getAllFromDB);
 router.post('/', CourseController.insertIntoDB);
 router.patch(
-  ':/id',
+  '/:id',
   validateRequest(CourseValidation.update),
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   CourseController.updateOneInDB

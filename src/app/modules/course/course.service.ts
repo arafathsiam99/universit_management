@@ -13,7 +13,7 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
 
   const newCourse = await prisma.$transaction(async transactionClient => {
     const result = await transactionClient.course.create({
-      data: courseData,
+      data: courseData
     });
 
     if (!result) {
@@ -26,32 +26,32 @@ const insertIntoDB = async (data: ICourseCreateData): Promise<any> => {
           await transactionClient.courseToPrerequisite.create({
             data: {
               courseId: result.id,
-              preRequisiteId: preRequisiteCourses[index].courseId,
-            },
+              preRequisiteId: preRequisiteCourses[index].courseId
+            }
           });
         console.log(createPrerequisite);
       }
     }
     return result;
   });
-  
+
   if (newCourse) {
     const responseData = await prisma.course.findUnique({
       where: {
-        id: newCourse.id,
+        id: newCourse.id
       },
       include: {
         preRequisite: {
           include: {
-            preRequisite: true,
-          },
+            preRequisite: true
+          }
         },
         preRequisiteFor: {
           include: {
-            course: true,
-          },
-        },
-      },
+            course: true
+          }
+        }
+      }
     });
     return responseData;
   }
@@ -63,13 +63,25 @@ const updateOneInDB = async (
   payload: ICourseCreateData
 ): Promise<Course | null> => {
   const { preRequisiteCourses, ...courseData } = payload;
-  const result = await prisma.course.update({
-    where: {
-      id,
-    },
-    data: courseData,
+
+  await prisma.$transaction(async transactionClient => {
+    const result = await transactionClient.course.update({
+      where: {
+        id
+      },
+      data: courseData
+    });
+    if (!result) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to update Course');
+    }
+    if (preRequisiteCourses && preRequisiteCourses.length > 0) {
+      const deletePrerequisite = preRequisiteCourses.filter(
+        coursePrerequisite =>
+          coursePrerequisite.courseId && coursePrerequisite.isDeleted
+      );
+      console.log(deletePrerequisite);
+    }
   });
-  return result;
 };
 
 const getAllFromDB = async (
@@ -87,9 +99,9 @@ const getAllFromDB = async (
       OR: CourseSearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
-          mode: 'insensitive',
-        },
-      })),
+          mode: 'insensitive'
+        }
+      }))
     });
   }
 
@@ -97,9 +109,9 @@ const getAllFromDB = async (
     andConditions.push({
       AND: Object.keys(filterData).map(key => ({
         [key]: {
-          equals: (filterData as any)[key],
-        },
-      })),
+          equals: (filterData as any)[key]
+        }
+      }))
     });
   }
 
@@ -113,11 +125,11 @@ const getAllFromDB = async (
     orderBy:
       options.sortBy && options.sortOrder
         ? {
-            [options.sortBy]: options.sortOrder,
+            [options.sortBy]: options.sortOrder
           }
         : {
-            createdAt: 'desc',
-          },
+            createdAt: 'desc'
+          }
   });
 
   const total = await prisma.course.count();
@@ -126,14 +138,14 @@ const getAllFromDB = async (
     meta: {
       total,
       page,
-      limit,
+      limit
     },
-    data: result,
+    data: result
   };
 };
 
 export const CourseService = {
   insertIntoDB,
   updateOneInDB,
-  getAllFromDB,
+  getAllFromDB
 };
