@@ -15,5 +15,6 @@ router.patch(
   auth(ENUM_USER_ROLE.SUPER_ADMIN, ENUM_USER_ROLE.ADMIN),
   CourseController.updateOneInDB
 );
+router.post('/:id/assign-faculties', CourseController.assignFaculties);
 
 export const courseRoutes = router;

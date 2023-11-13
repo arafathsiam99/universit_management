@@ -12,7 +12,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Course created successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -29,7 +29,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: 'Course data fetched!!',
     meta: result.meta,
-    data: result.data,
+    data: result.data
   });
 });
 
@@ -40,7 +40,18 @@ const updateOneInDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Course updated successfully',
-    data: result,
+    data: result
+  });
+});
+
+const assignFaculties = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await CourseService.assignFaculties(id, req.body.faculties);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Course faculty assigned successfully',
+    data: result
   });
 });
 
@@ -48,4 +59,5 @@ export const CourseController = {
   insertIntoDB,
   getAllFromDB,
   updateOneInDB,
+  assignFaculties
 };
