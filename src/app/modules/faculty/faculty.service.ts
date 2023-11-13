@@ -1,4 +1,4 @@
-import { Faculty, Prisma } from '@prisma/client';
+import { CourseFaculty, Faculty, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
@@ -6,7 +6,7 @@ import prisma from '../../../shared/prisma';
 import {
   facultyRelationalFields,
   facultyRelationalFieldsMapper,
-  facultySearchableFields,
+  facultySearchableFields
 } from './faculty.constants';
 import { IFacultyFilterRequest } from './faculty.interface';
 
@@ -15,8 +15,8 @@ const insertIntoDB = async (data: Faculty): Promise<Faculty> => {
     data,
     include: {
       academicFaculty: true,
-      academicDepartment: true,
-    },
+      academicDepartment: true
+    }
   });
   return result;
 };
@@ -35,9 +35,9 @@ const getAllFromDB = async (
       OR: facultySearchableFields.map(field => ({
         [field]: {
           contains: searchTerm,
-          mode: 'insensitive',
-        },
-      })),
+          mode: 'insensitive'
+        }
+      }))
     });
   }
 
@@ -47,17 +47,17 @@ const getAllFromDB = async (
         if (facultyRelationalFields.includes(key)) {
           return {
             [facultyRelationalFieldsMapper[key]]: {
-              id: (filterData as any)[key],
-            },
+              id: (filterData as any)[key]
+            }
           };
         } else {
           return {
             [key]: {
-              equals: (filterData as any)[key],
-            },
+              equals: (filterData as any)[key]
+            }
           };
         }
-      }),
+      })
     });
   }
 
@@ -67,7 +67,7 @@ const getAllFromDB = async (
   const result = await prisma.faculty.findMany({
     include: {
       academicFaculty: true,
-      academicDepartment: true,
+      academicDepartment: true
     },
     where: whereConditions,
     skip,
@@ -76,32 +76,32 @@ const getAllFromDB = async (
       options.sortBy && options.sortOrder
         ? { [options.sortBy]: options.sortOrder }
         : {
-            createdAt: 'desc',
-          },
+            createdAt: 'desc'
+          }
   });
   const total = await prisma.faculty.count({
-    where: whereConditions,
+    where: whereConditions
   });
 
   return {
     meta: {
       total,
       page,
-      limit,
+      limit
     },
-    data: result,
+    data: result
   };
 };
 
 const getByIdFromDB = async (id: string): Promise<Faculty | null> => {
   const result = await prisma.faculty.findUnique({
     where: {
-      id,
+      id
     },
     include: {
       academicFaculty: true,
-      academicDepartment: true,
-    },
+      academicDepartment: true
+    }
   });
   return result;
 };
@@ -111,9 +111,9 @@ const updateIntoDB = async (
 ): Promise<Faculty> => {
   const result = await prisma.faculty.update({
     where: {
-      id,
+      id
     },
-    data: payload,
+    data: payload
   });
   return result;
 };
@@ -121,10 +121,54 @@ const updateIntoDB = async (
 const deleteFromDB = async (id: string): Promise<Faculty> => {
   const result = await prisma.faculty.delete({
     where: {
-      id,
-    },
+      id
+    }
   });
   return result;
+};
+
+const assignCourses = async (
+  id: string,
+  payload: string[]
+): Promise<CourseFaculty[]> => {
+  await prisma.courseFaculty.createMany({
+    data: payload.map(courseId => ({
+      facultyId: id,
+      courseId: courseId
+    }))
+  });
+  const assignCoursesData = await prisma.courseFaculty.findMany({
+    where: {
+      facultyId: id
+    },
+    include: {
+      course: true
+    }
+  });
+  return assignCoursesData;
+};
+
+const removeCourses = async (
+  id: string,
+  payload: string[]
+): Promise<CourseFaculty[] | null> => {
+  await prisma.courseFaculty.deleteMany({
+    where: {
+      facultyId: id,
+      courseId: {
+        in: payload
+      }
+    }
+  });
+  const assignCoursesData = await prisma.courseFaculty.findMany({
+    where: {
+      facultyId: id
+    },
+    include: {
+      course: true
+    }
+  });
+  return assignCoursesData;
 };
 
 export const FacultyService = {
@@ -132,5 +176,7 @@ export const FacultyService = {
   getAllFromDB,
   getByIdFromDB,
   updateIntoDB,
-  deleteFromDB
+  deleteFromDB,
+  assignCourses,
+  removeCourses
 };

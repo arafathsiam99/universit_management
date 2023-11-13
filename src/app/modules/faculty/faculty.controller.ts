@@ -12,7 +12,7 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Faculty created successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -25,7 +25,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: 'Faculties fetched successfully',
     meta: result.meta,
-    data: result.data,
+    data: result.data
   });
 });
 
@@ -36,7 +36,7 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Faculty fetched successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -48,7 +48,7 @@ const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Faculty updated successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -59,16 +59,38 @@ const deleteFromDB = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Faculty deleted successfully',
-    data: result,
+    data: result
   });
 });
 
+const assignCourses = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await FacultyService.assignCourses(id, req.body.courses);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Course faculty assigned successfully',
+    data: result
+  });
+});
 
+const removeCourses = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await FacultyService.removeCourses(id, req.body.courses);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Course faculty deleted successfully',
+    data: result
+  });
+});
 
 export const FacultyController = {
   insertIntoDB,
   getAllFromDB,
   getByIdFromDB,
   updateIntoDB,
-  deleteFromDB
+  deleteFromDB,
+  assignCourses,
+  removeCourses
 };
