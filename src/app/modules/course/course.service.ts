@@ -79,9 +79,55 @@ const updateOneInDB = async (
         coursePrerequisite =>
           coursePrerequisite.courseId && coursePrerequisite.isDeleted
       );
-      console.log(deletePrerequisite);
+      const newPrerequisite = preRequisiteCourses.filter(
+        coursePrerequisite =>
+          coursePrerequisite.courseId && !coursePrerequisite.isDeleted
+      );
+      for (let index = 0; index < deletePrerequisite.length; index++) {
+        await transactionClient.courseToPrerequisite.deleteMany({
+          where: {
+            AND: [
+              {
+                courseId: id
+              },
+              {
+                preRequisiteId: deletePrerequisite[index].courseId
+              }
+            ]
+          }
+        });
+      }
+
+      for (let index = 0; index < newPrerequisite.length; index++) {
+        await transactionClient.courseToPrerequisite.create({
+          data: {
+            courseId: id,
+            preRequisiteId: newPrerequisite[index].courseId
+          }
+        });
+      }
+    }
+    return result;
+  });
+
+  const responseData = await prisma.course.findUnique({
+    where: {
+      id
+    },
+    include: {
+      preRequisite: {
+        include: {
+          preRequisite: true
+        }
+      },
+      preRequisiteFor: {
+        include: {
+          course: true
+        }
+      }
     }
   });
+  return responseData;
 };
 
 const getAllFromDB = async (
